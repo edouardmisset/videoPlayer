@@ -12,18 +12,14 @@ const videoPlayer = document.querySelector(".player"),
   progress = progressBar.querySelector(".progress__filled"),
   skipButtons = videoPlayer.querySelectorAll("[data-skip]");
 
-const totalTime = video.duration;
-let time = 0,
-  audioVolume = 100,
-  playSpeed = 1;
-
 // ---------------
 // Event listeners
 //----------------
+
 // Play / pause video
 video.addEventListener("click", togglePlay);
 playPause.addEventListener("click", togglePlay);
-// Change button
+// Update play / pause button
 video.addEventListener("play", updateButton);
 video.addEventListener("pause", updateButton);
 // Displaying a time bar
@@ -34,13 +30,19 @@ skipButtons.forEach((button) => button.addEventListener("click", jump));
 speed.addEventListener("change", rangeUpdate);
 // Volume
 volume.addEventListener("change", rangeUpdate);
+// Update progress
+video.addEventListener("timeupdate", updateProgressBar);
+// Move in video
+progressBar.addEventListener("click", moveThrough);
 
 // ---------
 // Functions
 //----------
+
 //  Function to jump head or back
 function jump() {
   video.currentTime += Number(this.dataset.skip);
+  updateProgressBar();
 }
 
 // play or pause video depending on its state
@@ -54,11 +56,15 @@ function updateButton() {
 }
 
 // Update progress bar
-function updateProgressBar(event) {
-  // console.log(event.target.currentTime);
-  // console.log(video.duration);
+function updateProgressBar() {
+  progress.style.flexBasis = `${(video.currentTime / video.duration) * 100}%`;
 }
 
 function rangeUpdate() {
   video[this.name] = this.value;
+}
+
+function moveThrough(event) {
+  video.currentTime =
+    (event.offsetX / progressBar.offsetWidth) * video.duration;
 }
