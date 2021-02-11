@@ -31,9 +31,9 @@ video.addEventListener("play", updateProgressBar);
 // Skipping
 skipButtons.forEach((button) => button.addEventListener("click", jump));
 // Speed
-speed.addEventListener("change", changeSpeed);
+speed.addEventListener("change", rangeUpdate);
 // Volume
-volume.addEventListener("change", changeVolume);
+volume.addEventListener("change", rangeUpdate);
 
 // ---------
 // Functions
@@ -59,6 +59,6 @@ function updateProgressBar(event) {
   // console.log(video.duration);
 }
 
-function changeSpeed() {}
-
-function changeVolume() {}
+function rangeUpdate() {
+  video[this.name] = this.value;
+}
